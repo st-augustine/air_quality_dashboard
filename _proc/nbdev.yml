@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "air_quality_dashboard"
+  site-url: "https://st-augustine.github.io/air_quality_dashboard"
+  description: "Streamlit dashboard showing air quality"
+  repo-branch: main
+  repo-url: "https://github.com/st-augustine/air_quality_dashboard"
