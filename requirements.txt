@@ -1,0 +1,6 @@
+streamlit
+pandas
+numpy
+plotly.express
+geopandas
+bokeh == 2.4.3
