@@ -68,7 +68,7 @@ data = pd.read_sql(sql, conn)
 
 
 # %%
-fig, ax =plt.subplots(figsize=(2,2))
+fig, ax=plt.subplots(figsize=(4,4))
 ax=sns.lineplot(x= '@MeasurementDateGMT', y= '@Value', data=data, hue='@Site')
 st.pyplot(fig)
 
