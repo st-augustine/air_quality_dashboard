@@ -6,4 +6,3 @@ seaborn
 requests
 datetime
 sqlite_utils
-sqlite3

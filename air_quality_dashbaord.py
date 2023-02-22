@@ -5,7 +5,6 @@ import numpy as np
 import requests
 from datetime import date, datetime, timedelta
 import sqlite_utils
-import sqlite3
 import matplotlib.pyplot as plt
 import seaborn as sns
 
