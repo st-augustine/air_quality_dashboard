@@ -6,6 +6,7 @@ import requests
 from datetime import date, datetime, timedelta
 import sqlite_utils
 import matplotlib as plt
+from matplotlib import subplots
 import seaborn as sns
 import sqlite3
 # %%
