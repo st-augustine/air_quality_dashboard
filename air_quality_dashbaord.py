@@ -7,7 +7,7 @@ from datetime import date, datetime, timedelta
 import sqlite_utils
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import sqlite3
 # %%
 
 st.set_page_config(layout = "wide")
