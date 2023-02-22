@@ -4,7 +4,7 @@ import streamlit as st
 import numpy as np
 import requests
 from datetime import date, datetime, timedelta
-import sqlite3
+import sqlite_utils
 import matplotlib.pyplot as plt
 import seaborn as sns
 
