@@ -1,3 +1,7 @@
 streamlit
 pandas
 numpy
+matplotlib
+seabornsqlite3
+requests
+datetime
