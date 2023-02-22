@@ -8,6 +8,7 @@ import sqlite_utils
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sqlite3
+
 # %%
 
 st.set_page_config(layout = "wide")
@@ -70,5 +71,6 @@ data = pd.read_sql(sql, conn)
 fig, ax =plt.subplots()
 ax=sns.lineplot(x= '@MeasurementDateGMT', y= '@Value', data=data, hue='@Site')
 st.pyplot(fig)
+
 
 
