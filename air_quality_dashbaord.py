@@ -87,7 +87,7 @@ fig.update_layout(title='',
                    xaxis_title='Measurement Date',
                    yaxis_title='NO2 Concentration (µg/m3)',
                    legend=dict(orientation="h", entrywidth=300,
-                   yanchor="bottom", y=1.02, xanchor="right", x=1),
+                   yanchor="bottom", y=0.5, xanchor="right", x=0.5),
                    legend_title_text= '', font=dict(size= 26))
 
 fig.update_xaxes(title_font=dict(size=22), tickfont=dict(size=18))
@@ -95,6 +95,6 @@ fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
 
 fig.show()
 
-st.plotly_chart(fig,use_container_width=True)
+st.plotly_chart(fig)
 
 
