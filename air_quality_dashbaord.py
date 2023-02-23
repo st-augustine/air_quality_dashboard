@@ -90,6 +90,9 @@ fig.update_layout(title='',
                    yanchor="bottom", y=1.02, xanchor="right", x=1),
                    legend_title_text= '')
 
+fig.update_xaxes(title_font=dict(size=18), tickfont=dict(size=18))
+fig.update_yaxes(title_font=dict(size=18), tickfont=dict(size=18))
+
 fig.show()
 
 st.plotly_chart(fig)
