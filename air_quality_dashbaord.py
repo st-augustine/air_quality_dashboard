@@ -95,6 +95,6 @@ fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
 
 fig.show()
 
-st.plotly_chart(fig)
+st.plotly_chart(fig,theme=None)
 
 
