@@ -101,6 +101,10 @@ fig.update_traces(hovertemplate='<b>Measurement time (GMT) = </b>%{x}<br><b>Valu
 fig.update_layout(hoverlabel = dict(
     font_size = 16))
 
+fig.add_hline(y=40,line_dash='dot')
+
+#fig.add_annotation(x=20,y=40, text='Maximum target concentration', showarrow=False,yshift=10)
+
 fig.show()
 
 st.plotly_chart(fig,theme=None)
