@@ -87,8 +87,8 @@ fig.update_layout(title='',
                    xaxis_title='Measurement Date',
                    yaxis_title='NO2 Concentration (µg/m3)',
                    legend=dict(orientation="h", #entrywidth=200,
-                   #yanchor="bottom", y=1.02, xanchor="right", x=1),
-                   legend_title_text= False, font=dict(size= 18)))
+                   yanchor="bottom", y=1.02, xanchor="right", x=1),
+                   legend_title_text= False, font=dict(size= 18))
 
 fig.update_xaxes(title_font=dict(size=22), tickfont=dict(size=18))
 fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
