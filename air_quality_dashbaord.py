@@ -14,7 +14,7 @@ import plotly.express as px
 
 st.set_page_config(layout = "wide")
 st.title("Air quality")
-st.text('This is a web app to allow air quality in Tower Hamlets')
+st.text('This is a web app showing air quality in Tower Hamlets')
 
 # %%
 # SETUP DATABASE, TABLE AND SCHEMA
@@ -23,9 +23,9 @@ db = sqlite_utils.Database("air-sensors.db")
 tablename = 'NO2'
 table = db.table(
     tablename,
-    pk=('@MeasurementDateGMT', '@Site'),
-    not_null={"@MeasurementDateGMT", "@Value", "@Site"},
-    column_order=("@MeasurementDateGMT", "@Value", "@Site")
+    pk=('@MeasurementDateGMT', '@Site'), # pk (primary keys) are columns that uniquely identify each row in the table  
+    not_null={"@MeasurementDateGMT", "@Value", "@Site"},# constrains a column so it cannot contain null values 
+    column_order=("@MeasurementDateGMT", "@Value", "@Site") #
 )
 
 # %%
