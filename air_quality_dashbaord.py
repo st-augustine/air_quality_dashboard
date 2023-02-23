@@ -99,7 +99,7 @@ fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
 fig.update_traces(hovertemplate='<b>Measurement time (GMT) = </b>%{x}<br><b>Value = </b>%{y}<extra></extra>')
 
 fig.update_layout(hoverlabel = dict(
-    font_size = 18))
+    font_size = 16))
 
 fig.show()
 
