@@ -81,17 +81,17 @@ data = pd.read_sql(sql, conn)
 
 
 # %%
-fig = px.line(data, x= '@MeasurementDateGMT', y= '@Value', color='@Site')
+fig = px.line(data, x= '@MeasurementDateGMT', y= '@Value', color='@Site',width=1000, height= 600)
 
 fig.update_layout(title='',
                    xaxis_title='Measurement Date',
                    yaxis_title='NO2 Concentration (µg/m3)',
                    legend=dict(orientation="h", entrywidth=70,
                    yanchor="bottom", y=1.02, xanchor="right", x=1),
-                   legend_title_text= '')
+                   legend_title_text= '', font=dict(size= 18))
 
-fig.update_xaxes(title_font=dict(size=18), tickfont=dict(size=18))
-fig.update_yaxes(title_font=dict(size=18), tickfont=dict(size=18))
+fig.update_xaxes(title_font=dict(size=22), tickfont=dict(size=18))
+fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
 
 fig.show()
 
