@@ -88,7 +88,8 @@ fig.update_layout(title='',
                    yaxis_title='NO<sub>2</sub> Concentration (µg/m<sup>3</sup>)',
                    legend=dict(orientation="h", entrywidth=250,
                    yanchor="bottom", y=1.02, xanchor="right", x=1),
-                   legend_title_text= '', font=dict(size= 18))
+                   legend_title_text= '', font=dict(size= 18)
+                   )
 
 fig.update_xaxes(title_font=dict(size=22), tickfont=dict(size=18))
 fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
@@ -97,7 +98,8 @@ fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
 
 fig.update_traces(hovertemplate='<b>Measurement time (GMT) = </b>%{x}<br><b>Value = </b>%{y}<extra></extra>')
 
-
+fig.update_layout(hoverlabel = dict(
+    font_size = 18))
 
 fig.show()
 
