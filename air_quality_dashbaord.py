@@ -81,7 +81,7 @@ data = pd.read_sql(sql, conn)
 
 
 # %%
-fig = px.line(data, x= '@MeasurementDateGMT', y= '@Value', color='@Site',width=1000, height= 600)
+fig = px.line(data, x= '@MeasurementDateGMT', y= '@Value', color='@Site',width=1200, height= 600)
 
 fig.update_layout(title='',
                    xaxis_title='Measurement Date',
