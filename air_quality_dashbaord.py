@@ -86,7 +86,7 @@ fig = px.line(data, x= '@MeasurementDateGMT', y= '@Value', color='@Site',width=1
 fig.update_layout(title='',
                    xaxis_title='Measurement Date',
                    yaxis_title='NO2 Concentration (µg/m3)',
-                   legend=dict(orientation="h", entrywidth=300, entryheight=300,
+                   legend=dict(orientation="h", entrywidth=300,
                    yanchor="bottom", y=1.02, xanchor="right", x=1),
                    legend_title_text= '', font=dict(size= 26))
 
