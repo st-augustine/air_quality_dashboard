@@ -85,7 +85,7 @@ fig = px.line(data, x= '@MeasurementDateGMT', y= '@Value', color='@Site',width=1
 
 fig.update_layout(title='',
                    xaxis_title='Measurement Date',
-                   yaxis_title='NO2 Concentration (µg/m3)',
+                   yaxis_title='NO<sup>2</sup> Concentration (µg/m<sup>3</sup>)',
                    legend=dict(orientation="h", entrywidth=250,
                    yanchor="bottom", y=1.02, xanchor="right", x=1),
                    legend_title_text= '', font=dict(size= 18))
@@ -95,7 +95,7 @@ fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
 
 print("plotly express hovertemplate:", fig.data[0].hovertemplate)
 
-fig.update_traces(hovertemplate='Measurement Date (GMT) = %{x}<br>Value = %{y}<extra></extra>')
+fig.update_traces(hovertemplate='Measurement time (GMT) = %{x}<br>Value = %{y}<extra></extra>')
 
 
 
