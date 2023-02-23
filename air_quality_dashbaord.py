@@ -93,6 +93,12 @@ fig.update_layout(title='',
 fig.update_xaxes(title_font=dict(size=22), tickfont=dict(size=18))
 fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
 
+print("plotly express hovertemplate:", fig.data[0].hovertemplate)
+
+fig.update_traces(hovertemplate='Measurement Date (GMT) = %{x}<br>Value = %{y}')
+
+
+
 fig.show()
 
 st.plotly_chart(fig,theme=None)
