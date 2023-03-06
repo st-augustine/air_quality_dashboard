@@ -40,7 +40,7 @@ sites = js['Sites']['Site'] #turns dictionary into list
 # PREPARE TO SCAN DATA FOR THE LAST 1 WEEK
 EndDate = date.today() + timedelta(days = 1)
 EndWeekDate = EndDate
-StartWeekDate = EndDate - timedelta(weeks = 1)
+StartWeekDate = EndDate - timedelta(weeks = 2)
 StartDate = StartWeekDate - timedelta(days = 1)
 
 
