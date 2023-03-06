@@ -1,4 +1,6 @@
 # %%
+#import required packages
+
 import pandas as pd
 import streamlit as st 
 import numpy as np
@@ -11,6 +13,7 @@ import sqlite3
 import plotly.express as px
 
 # %%
+#set up streamlit page 
 
 st.set_page_config(layout = "wide")
 st.title("Air quality")
@@ -36,10 +39,10 @@ js = req.json() #json is like a python dictionary
 sites = js['Sites']['Site'] #turns dictionary into list 
 
 # %%
-# PREPARE TO SCAN DATA FOR THE LAST 1 WEEK
+# PREPARE TO SCAN DATA FOR THE LAST 2 WEEKs
 EndDate = date.today() + timedelta(days = 1)
 EndWeekDate = EndDate
-StartWeekDate = EndDate - timedelta(weeks = 1)
+StartWeekDate = EndDate - timedelta(weeks = 2)
 StartDate = StartWeekDate - timedelta(days = 1)
 
 # %%
@@ -61,16 +64,18 @@ while StartWeekDate > StartDate :
             filteredList = list(filtered)
             db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
     EndWeekDate = StartWeekDate
-    StartWeekDate = EndWeekDate - timedelta(weeks = 3)
+    StartWeekDate = EndWeekDate - timedelta(weeks = 2)
 
 # %%
-#turns sqlite database into a python database 
+#turns sqlite database into a pandas dataframe
 conn= sqlite3.connect('air-sensors.db')
 sql= """SELECT * FROM NO2; """
 data = pd.read_sql(sql, conn)
 
 
 # %%
+#plotting time series 
+
 fig = px.line(data, x= '@MeasurementDateGMT', y= '@Value', color='@Site',width=1200, height= 700)
 
 fig.update_layout(title='',
