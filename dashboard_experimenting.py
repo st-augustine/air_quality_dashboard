@@ -40,7 +40,7 @@ sites = js['Sites']['Site'] #turns dictionary into list
 # PREPARE TO SCAN DATA FOR THE LAST 1 WEEK
 EndDate = date.today() + timedelta(days = 1)
 EndWeekDate = EndDate
-StartWeekDate = EndDate - timedelta(weeks = 1)
+StartWeekDate = EndDate - timedelta(weeks = 2)
 StartDate = StartWeekDate - timedelta(days = 1)
 
 
@@ -54,16 +54,15 @@ while StartWeekDate > StartDate :
         j = req.json()
         # CLEAN SITES WITH NO DATA OR ZERO VALUE OR NOT NO2 (ONLY MEASURE AVAILABLE AT ALL SITES)
         filtered = [a for a in j['RawAQData']['Data'] if a['@Value'] != '' and a['@Value'] != '0' ] #removes zero and missing values 
-        print(filtered)
         if len(filtered) != 0:
-            #filtered = functions.convert(filtered, filtered[1], filtered[2], el)
-            for element in filtered:
-                 element['@Value']=float(element['@Value'])
-                 element['@Site']=el['@SiteName']
+            #for element in filtered:
+                # element['@Value']=float(element['@Value'])
+                # filtered['@Site']=el['@SiteName']
+            filtered=map(float, filtered)
             filteredList = list(filtered)
             db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
     EndWeekDate = StartWeekDate
-    StartWeekDate = EndWeekDate - timedelta(weeks = 1)
+    StartWeekDate = EndWeekDate - timedelta(weeks = 2)
 
 # %%
 #turns sqlite database into a python database 
