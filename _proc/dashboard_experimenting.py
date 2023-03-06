@@ -63,7 +63,7 @@ while StartWeekDate > StartDate :
             filteredList = list(filtered)
             db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
     EndWeekDate = StartWeekDate
-    StartWeekDate = EndWeekDate - timedelta(weeks = 1)
+    StartWeekDate = EndWeekDate - timedelta(weeks = 2)
 
 # %%
 #turns sqlite database into a python database 
