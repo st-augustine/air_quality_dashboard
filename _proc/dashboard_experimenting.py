@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import sqlite3
 import plotly.express as px
-import functions
+#import functions
 
 # %%
 
