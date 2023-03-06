@@ -1,0 +1,7 @@
+def convert(dataframe, float_column):
+    ''' 
+    converts columns to the correct data format
+    '''
+    dataframe[float_column] = float(dataframe[float_column])
+    dataframe['@Site'] = el['@SiteName']
+    return dataframe

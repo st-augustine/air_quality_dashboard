@@ -40,7 +40,7 @@ sites = js['Sites']['Site'] #turns dictionary into list
 # PREPARE TO SCAN DATA FOR THE LAST 1 WEEK
 EndDate = date.today() + timedelta(days = 1)
 EndWeekDate = EndDate
-StartWeekDate = EndDate - timedelta(weeks = 2)
+StartWeekDate = EndDate - timedelta(weeks = 3)
 StartDate = StartWeekDate - timedelta(days = 1)
 
 
@@ -62,7 +62,7 @@ while StartWeekDate > StartDate :
             filteredList = list(filtered)
             db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
     EndWeekDate = StartWeekDate
-    StartWeekDate = EndWeekDate - timedelta(weeks = 2)
+    StartWeekDate = EndWeekDate - timedelta(weeks = 3)
 
 # %%
 #turns sqlite database into a python database 
