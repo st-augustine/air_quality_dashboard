@@ -70,7 +70,7 @@ def doWork():
             db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
     EndWeekDate = StartWeekDate
     StartWeekDate = EndWeekDate - timedelta(weeks = 2)
-
+    pass
 l = task.LoopingCall(doWork)
 l.start(timeout) # call every sixty seconds
 
