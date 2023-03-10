@@ -7,4 +7,4 @@ requests
 datetime
 sqlite_utils
 plotly.express
-twisted
+twisted.internet
