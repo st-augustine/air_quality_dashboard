@@ -41,15 +41,16 @@ sites = js['Sites']['Site'] #turns dictionary into list
 
 # %%
 # PREPARE TO SCAN DATA FOR THE LAST 2 WEEKs
-EndDate = date.today() + timedelta(days = 1)
-EndWeekDate = EndDate
-StartWeekDate = EndDate - timedelta(weeks = 2)
-StartDate = StartWeekDate - timedelta(days = 1)
+
 
 # %%
-timeout=3600.0
+timeout=10.0
 
 def doWork():
+    EndDate = date.today() + timedelta(days = 1)
+    EndWeekDate = EndDate
+    StartWeekDate = EndDate - timedelta(weeks = 2)
+    StartDate = StartWeekDate - timedelta(days = 1)
     while StartWeekDate > StartDate :
      for el in sites:
         def convert(list):
@@ -69,7 +70,6 @@ def doWork():
             db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
     EndWeekDate = StartWeekDate
     StartWeekDate = EndWeekDate - timedelta(weeks = 2)
-    pass
 
 l = task.LoopingCall(doWork)
 l.start(timeout) # call every sixty seconds
