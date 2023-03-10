@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import sqlite3
 import plotly.express as px
+from twisted.internet import task, reactor
 
 # %%
 #set up streamlit page 
@@ -46,9 +47,11 @@ StartWeekDate = EndDate - timedelta(weeks = 2)
 StartDate = StartWeekDate - timedelta(days = 1)
 
 # %%
-# GET THE JSON DATA, UPSERT INTO THE FULL HISTORY DATABASE
-while StartWeekDate > StartDate :
-    for el in sites:
+timeout=3600.0
+
+def doWork():
+    while StartWeekDate > StartDate :
+     for el in sites:
         def convert(list):
             list['@Value'] = float(list['@Value'])
             list['@Site'] = el['@SiteName']
@@ -56,6 +59,7 @@ while StartWeekDate > StartDate :
         url = f'https://api.erg.ic.ac.uk/AirQuality/Data/SiteSpecies/SiteCode={el["@SiteCode"]}/SpeciesCode=NO2/StartDate={StartWeekDate.strftime("%d %b %Y")}/EndDate={EndWeekDate.strftime("%d %b %Y")}/Json'
         print(url)
         req = requests.get(url, headers={'Connection':'close'}) #closes connection to the api
+        print(req)
         j = req.json()
         # CLEAN SITES WITH NO DATA OR ZERO VALUE OR NOT NO2 (ONLY MEASURE AVAILABLE AT ALL SITES)
         filtered = [a for a in j['RawAQData']['Data'] if a['@Value'] != '' and a['@Value'] != '0' ] #removes zero and missing values 
@@ -65,6 +69,12 @@ while StartWeekDate > StartDate :
             db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
     EndWeekDate = StartWeekDate
     StartWeekDate = EndWeekDate - timedelta(weeks = 2)
+    pass
+
+l = task.LoopingCall(doWork)
+l.start(timeout) # call every sixty seconds
+
+reactor.run()
 
 # %%
 #turns sqlite database into a pandas dataframe
@@ -72,6 +82,9 @@ conn= sqlite3.connect('air-sensors.db')
 sql= """SELECT * FROM NO2; """
 data = pd.read_sql(sql, conn)
 
+
+# %%
+data.groupby('@Site')['@Value'].mean()
 
 # %%
 #plotting time series 
