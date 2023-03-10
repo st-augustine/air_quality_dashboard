@@ -40,58 +40,55 @@ js = req.json() #json is like a python dictionary
 sites = js['Sites']['Site'] #turns dictionary into list 
 
 # %%
-# PREPARE TO SCAN DATA FOR THE LAST 2 WEEKs
 
 
 # %%
-timeout=10.0
+def create_sqlite_df():
 
-def doWork():
-    EndDate = date.today() + timedelta(days = 1)
-    EndWeekDate = EndDate
-    StartWeekDate = EndDate - timedelta(weeks = 2)
-    StartDate = StartWeekDate - timedelta(days = 1)
-    while StartWeekDate > StartDate :
-     for el in sites:
-        def convert(list):
-            list['@Value'] = float(list['@Value'])
-            list['@Site'] = el['@SiteName']
-            return list
-        url = f'https://api.erg.ic.ac.uk/AirQuality/Data/SiteSpecies/SiteCode={el["@SiteCode"]}/SpeciesCode=NO2/StartDate={StartWeekDate.strftime("%d %b %Y")}/EndDate={EndWeekDate.strftime("%d %b %Y")}/Json'
-        print(url)
-        req = requests.get(url, headers={'Connection':'close'}) #closes connection to the api
-        print(req)
-        j = req.json()
-        # CLEAN SITES WITH NO DATA OR ZERO VALUE OR NOT NO2 (ONLY MEASURE AVAILABLE AT ALL SITES)
-        filtered = [a for a in j['RawAQData']['Data'] if a['@Value'] != '' and a['@Value'] != '0' ] #removes zero and missing values 
-        if len(filtered) != 0:
-            filtered = map(convert, filtered)
-            filteredList = list(filtered)
-            db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
-    EndWeekDate = StartWeekDate
-    StartWeekDate = EndWeekDate - timedelta(weeks = 2)
-    pass
-l = task.LoopingCall(doWork)
-l.start(timeout) # call every sixty seconds
+ EndDate = date.today() + timedelta(days = 1)
+ EndWeekDate = EndDate
+ StartWeekDate = EndDate - timedelta(weeks = 2)
+ StartDate = StartWeekDate - timedelta(days = 1)
 
-reactor.run()
-
-# %%
-#turns sqlite database into a pandas dataframe
-conn= sqlite3.connect('air-sensors.db')
-sql= """SELECT * FROM NO2; """
-data = pd.read_sql(sql, conn)
+ while StartWeekDate > StartDate :
+        for el in sites:
+            def convert(list):
+                list['@Value'] = float(list['@Value'])
+                list['@Site'] = el['@SiteName']
+                return list
+            url = f'https://api.erg.ic.ac.uk/AirQuality/Data/SiteSpecies/SiteCode={el["@SiteCode"]}/SpeciesCode=NO2/StartDate={StartWeekDate.strftime("%d %b %Y")}/EndDate={EndWeekDate.strftime("%d %b %Y")}/Json'
+            print(url)
+            req = requests.get(url, headers={'Connection':'close'}) #closes connection to the api
+            print(req)
+            j = req.json()
+            # CLEAN SITES WITH NO DATA OR ZERO VALUE OR NOT NO2 (ONLY MEASURE AVAILABLE AT ALL SITES)
+            filtered = [a for a in j['RawAQData']['Data'] if a['@Value'] != '' and a['@Value'] != '0' ] #removes zero and missing values 
+            if len(filtered) != 0:
+                filtered = map(convert, filtered)
+                filteredList = list(filtered)
+                db[tablename].upsert_all(filteredList,pk=('@MeasurementDateGMT', '@Site')) #combo of update and insert, updates record if it already exists if not creates it 
+        EndWeekDate = StartWeekDate
+        StartWeekDate = EndWeekDate - timedelta(weeks = 2)
 
 
 # %%
-data.groupby('@Site')['@Value'].mean()
+def sql_to_pandas():
+    #turns sqlite database into a pandas dataframe
+    conn= sqlite3.connect('air-sensors.db')
+    sql= """SELECT * FROM NO2; """
+    data = pd.read_sql(sql, conn)
+    
+    return data
+
 
 # %%
 #plotting time series 
 
-fig = px.line(data, x= '@MeasurementDateGMT', y= '@Value', color='@Site',width=1200, height= 700)
+def plot_time_series():
+     
+ fig = px.line(sql_to_pandas(), x= '@MeasurementDateGMT', y= '@Value', color='@Site',width=1200, height= 700)
 
-fig.update_layout(title='',
+ fig.update_layout(title='',
                    xaxis_title='Measurement Date',
                    yaxis_title='NO<sub>2</sub> Concentration (µg/m<sup>3</sup>)',
                    legend=dict(orientation="h", entrywidth=250,
@@ -99,22 +96,36 @@ fig.update_layout(title='',
                    legend_title_text= '', font=dict(size= 18)
                    )
 
-fig.update_xaxes(title_font=dict(size=22), tickfont=dict(size=18))
-fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
+ fig.update_xaxes(title_font=dict(size=22), tickfont=dict(size=18))
+ fig.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
 
-#print("plotly express hovertemplate:", fig.data[0].hovertemplate)
+ #print("plotly express hovertemplate:", fig.data[0].hovertemplate)
 
-fig.update_traces(hovertemplate='<b>Measurement time (GMT) = </b>%{x}<br><b>Value = </b>%{y}<extra></extra>')
+ fig.update_traces(hovertemplate='<b>Measurement time (GMT) = </b>%{x}<br><b>Value = </b>%{y}<extra></extra>')
 
-fig.update_layout(hoverlabel = dict(
+ fig.update_layout(hoverlabel = dict(
     font_size = 16))
 
-fig.add_hline(y=40,line_dash='dot')
+ fig.add_hline(y=40,line_dash='dot')
 
 #fig.add_annotation(x=20,y=40, text='Maximum target concentration', showarrow=False,yshift=10)
 
-fig.show()
+ fig.show()
 
-st.plotly_chart(fig,theme=None)
+ st.plotly_chart(fig,theme=None)
+ print('should have plotted')
+
+# %%
+timeout=10.0
+
+def doWork():
+ create_sqlite_df()
+ sql_to_pandas()
+ plot_time_series()
+
+l = task.LoopingCall(doWork)
+l.start(timeout) # call every sixty seconds
+
+reactor.run()
 
 
