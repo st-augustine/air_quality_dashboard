@@ -21,7 +21,7 @@ st.set_page_config(layout = "wide")
 st.title("Air quality")
 st.text('This is a web app showing air quality in Tower Hamlets')
 
-st_autorefresh(interval=1*60*1000, key="api_update")
+st_autorefresh(interval=10*60*1000, key="api_update")
 
 # %%
 # SETUP DATABASE, TABLE AND SCHEMA
