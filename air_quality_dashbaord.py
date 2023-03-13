@@ -12,6 +12,7 @@ import seaborn as sns
 import sqlite3
 import plotly.express as px
 from twisted.internet import task, reactor
+from streamlit_autorefresh import st_autorefresh
 
 # %%
 #set up streamlit page 
@@ -38,9 +39,6 @@ table = db.table(
 req = requests.get("https://api.erg.ic.ac.uk/AirQuality/Information/MonitoringSiteSpecies/GroupName=towerhamlets/Json") #requests gets the info from the api 
 js = req.json() #json is like a python dictionary 
 sites = js['Sites']['Site'] #turns dictionary into list 
-
-# %%
-
 
 # %%
 def create_sqlite_df():
@@ -113,19 +111,24 @@ def plot_time_series():
  fig.show()
 
  st.plotly_chart(fig,theme=None)
- print('should have plotted')
+
 
 # %%
-timeout=10.0
+create_sqlite_df()
+sql_to_pandas()
+plot_time_series()
 
-def doWork():
- create_sqlite_df()
- sql_to_pandas()
- plot_time_series()
+# %%
+#timeout=10.0
 
-l = task.LoopingCall(doWork)
-l.start(timeout) # call every sixty seconds
+#def doWork():
+ #create_sqlite_df()
+ #sql_to_pandas()
+ #plot_time_series()
 
-reactor.run()
+#l = task.LoopingCall(doWork)
+#l.start(timeout) # call every sixty seconds
+
+#reactor.run()
 
 
