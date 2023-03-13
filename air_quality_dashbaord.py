@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import sqlite3
 import plotly.express as px
-from twisted.internet import task, reactor
+#from twisted.internet import task, reactor
 from streamlit_autorefresh import st_autorefresh
 
 # %%
@@ -132,5 +132,69 @@ plot_time_series()
 #l.start(timeout) # call every sixty seconds
 
 #reactor.run()
+
+# %%
+years=list(range(1994,2024))
+
+no2_complete=pd.DataFrame()
+
+for year in years:    
+    url = f'https://api.erg.ic.ac.uk/AirQuality/Annual/MonitoringObjective/GroupName=towerhamlets/Year={year}/Json'
+    #print(url)
+    req = requests.get(url, headers={'Connection':'close'}) #closes connection to the api
+    #print(req)
+    j = req.json()
+    l=j['SiteObjectives']['Site']
+    rows=[]
+    for data in l:
+        data_row=data['Objective']
+        n=data['@SiteName']
+
+        for row in data_row:
+            row['@SiteName']= n
+            rows.append(row)
+    df=pd.DataFrame(rows)
+    no2=df[df['@SpeciesCode']=='NO2']
+    
+    no2_complete=no2_complete.append(no2)
+
+
+# %%
+px.line(no2_complete[no2_complete['@ObjectiveName']=='40 ug/m3 as an annual mean'], x= '@Year', y= '@Value', color='@SiteName',width=1200, height= 700)
+
+# %%
+no2_filtered= no2_complete[no2_complete['@ObjectiveName'] == '40 ug/m3 as an annual mean']
+no2_filtered=no2_filtered[(no2_filtered['@SiteName'] == 'Tower Hamlets - Blackwall') | (no2_filtered['@SiteName']=='Tower Hamlets - Mile End Road')]
+no2_filtered['@Year']=pd.to_numeric(no2_filtered['@Year'])
+no2_filtered=no2_filtered[no2_filtered['@Year']>2006]
+
+# %%
+fig2=px.line(no2_filtered,x='@Year', y='@Value', color='@SiteName', width=1200, height=700)
+
+fig2.update_layout(title='',
+                   xaxis_title='Year',
+                   yaxis_title='NO<sub>2</sub> Concentration (µg/m<sup>3</sup>)',
+                   legend=dict(orientation="h", entrywidth=250,
+                   yanchor="bottom", y=1.02, xanchor="right", x=1),
+                   legend_title_text= '', font=dict(size= 18)
+                   )
+
+fig2.update_xaxes(title_font=dict(size=22), tickfont=dict(size=18))
+fig2.update_yaxes(title_font=dict(size=22), tickfont=dict(size=18))
+
+print("plotly express hovertemplate:", fig2.data[0].hovertemplate)
+
+fig2.update_traces(hovertemplate='<b>Year </b>%{x}<br><b>Average value = </b>%{y}<extra></extra>')
+
+fig2.update_layout(hoverlabel = dict(
+    font_size = 16))
+
+fig2.add_hline(y=40,line_dash='dot')
+
+#fig.add_annotation(x=20,y=40, text='Maximum target concentration', showarrow=False,yshift=10)
+
+fig2.show()
+
+st.plotly_chart(fig2,theme=None)
 
 
